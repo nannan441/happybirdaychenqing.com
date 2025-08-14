@@ -4,7 +4,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <meta name="title" content="ChenQing Birthday Website">
+    <meta name="title" content="ChenQing Birthday | Aoudumber Bade">
     <meta name="github" content="https://github.com/Aoudumber-Bade">
     <title>ChenQing Birthday</title>
     <link rel="stylesheet" href="style.css">
@@ -16,6 +16,20 @@
         rel="stylesheet">
     <script src="https://code.jquery.com/jquery-3.7.1.min.js"
         integrity="sha256-/JqT3SQfawRcv/BIHPThkBvs0OEvtFFmqPF/lYI/Cxo=" crossorigin="anonymous"></script>
+    <style>
+        /* 缩小主页头像圆圈尺寸 */
+        .box__account .image {
+            width: 170px;
+            height: 170px;
+        }
+        .box__account .image img {
+            width: 100%;
+            height: 100%;
+            border-radius: 50%;
+            border: 4px solid #fff;
+            object-fit: cover;
+        }
+    </style>
 </head>
 
 <body>
@@ -99,13 +113,11 @@
                 </div>
             </div>
         </div>
-
         <div class="decorate_star star1" style="--t: 15s;"></div>
         <div class="decorate_star star2" style="--t: 15.2s;"></div>
         <div class="decorate_star star3" style="--t: 15.4s;"></div>
         <div class="decorate_star star4" style="--t: 15.6s;"></div>
         <div class="decorate_star star5" style="--t: 15.8s;"></div>
-
         <div class="decorate_flower--one" style="--t: 15s;">
             <img width="20" src="decorate_flower.png" alt="">
         </div>
@@ -115,7 +127,6 @@
         <div class="decorate_flower--three" style="--t: 15.6s;">
             <img width="20" src="decorate_flower.png" alt="">
         </div>
-
         <div class="decorate_bottom">
             <img src="decorate.png" alt="" width="100">
         </div>
@@ -130,16 +141,21 @@
                     <div class="userImg">
                         <img src="unnamed.png" alt="">
                     </div>
-                    <h4 class="username">To：ChenQing<span class="underline"></span></h4>
+                    <h4 class="username">To: ChenQing 💖<span class="underline"></span></h4>
                     <h3>Happy Birthday</h3>
                     <div class="imageCute">
                         <img src="cute1.png" alt="">
                     </div>
+                    <!-- 新增封面落款 -->
+                    <p style="margin-top:10px; font-size:14px; color:#555;">From：斯威特厚木后花园</p>
                 </div>
                 <div class="card2">
                     <div class="card2-content">
                         <h3>To 陈情宝贝</h3>
-                        <h2>Happy birthday 🥳🎂🥳 非常幸运能够在Sweet Home与你相遇。谢谢你一直像一个姐姐一样照顾着我。真心祝福陈情宝贝破壳日快乐🐣希望你每天都开心顺遂。</h2>
+                        <h2>
+                            Happy birthday 🥳🎂🥳 非常幸运能够在Sweet Home与你相遇。谢谢你一直像天使姐姐一样照顾着每个人的情绪。真心祝福陈情宝贝破壳日快乐🐣希望你每天都开心顺遂。<br>
+                            <span style="font-size:14px; color:#555;">made by 小楠楠</span>
+                        </h2>
                         <div class="imageCute2">
                             <img src="cute2.png" alt="">
                         </div>
@@ -150,7 +166,6 @@
     </div>
 
 </body>
-
 <script>
     let datetxt = "15 August";
     let datatxtletter = "非常幸运能够在Sweet Home与你相遇。谢谢你一直像一个姐姐一样照顾着我。真心祝福陈情宝贝破壳日快乐🐣希望你每天都开心顺遂。Happy birthday to you.💕";
@@ -163,90 +178,32 @@
     let currentIndexTitle = 0;
     let date__of__birth = document.querySelector(".date__of__birth span");
     let text__letter = document.querySelector(".text__letter p");
-
     setTimeout(function () {
         timeDatetxt = setInterval(function () {
             if (currentIndex < charArrDate.length) {
                 date__of__birth.textContent += charArrDate[currentIndex];
                 currentIndex++;
-            } else {
-                let i = document.createElement("i");
-                i.className = "fa-solid fa-star";
-                document.querySelector(".date__of__birth").prepend(i);
-                document.querySelector(".date__of__birth").appendChild(i.cloneNode(true));
-                clearInterval(timeDatetxt);
             }
-        }, 100);
-    }, 12000);
+            else {
+                let i = document.createElement("i");
+                i.className = "fa-solid fa-star"
+                document.querySelector(".date__of__birth").prepend(i)
+                document.querySelector(".date__of__birth").appendChild(i.cloneNode(true))
+                clearInterval(timeDatetxt)
+            }
+        }, 100)
+    }, 12000)
 
-    var intervalContent;
-    var intervalTitle;
-    $("#btn__letter").on("click", function () {
-        $(".box__letter").slideDown();
-        setTimeout(function () {
-            $(".letter__border").slideDown();
-        }, 1000);
-        setTimeout(function () {
-            intervalTitle = setInterval(function () {
-                if (currentIndexTitle < charArrTitle.length) {
-                    document.querySelector(".title__letter").textContent += charArrTitle[currentIndexTitle];
-                    let i = document.createElement("i");
-                    i.className = "fa-solid fa-heart";
-                    document.querySelector(".title__letter").appendChild(i);
-                    currentIndexTitle++;
-                } else {
-                    clearInterval(intervalTitle);
-                }
-            }, 100);
-        }, 2000);
-        setTimeout(function () {
-            document.querySelector("#heart__letter").classList.add("animationOp");
-            document.querySelector(".love__img").classList.add("animationOp");
-            document.querySelector("#mewmew").classList.add("animationOp");
-        }, 2800);
-        setTimeout(function () {
-            document.querySelectorAll(".heart").forEach((item) => {
-                item.classList.add("animation");
-            });
-        }, 3500);
-        setTimeout(function () {
-            intervalContent = setInterval(function () {
-                if (currentIndexLetter < charArrDateLetter.length) {
-                    text__letter.textContent += charArrDateLetter[currentIndexLetter];
-                    currentIndexLetter++;
-                } else {
-                    clearInterval(intervalContent);
-                }
-            }, 50);
-        }, 6000);
-    });
-
-    $(".close").on("click", function () {
-        clearInterval(intervalContent);
-        document.querySelector(".title__letter").textContent = "";
-        text__letter.textContent = "";
-        currentIndexLetter = 0;
-        currentIndexTitle = 0;
-        document.querySelector("#heart__letter").classList.remove("animationOp");
-        document.querySelector(".love__img").classList.remove("animationOp");
-        document.querySelector("#mewmew").classList.remove("animationOp");
-        document.querySelectorAll(".heart").forEach((item) => {
-            item.classList.remove("animation");
-        });
-        $(".box__letter").slideUp();
-        $(".letter__border").slideUp();
-    });
-
-    let mailBox = document.querySelector('.mail');
-    let boxmail = document.querySelector('.boxMail');
-    var close = document.querySelector('.fa-xmark');
+    let mailBox = document.querySelector('.mail')
+    let boxmail = document.querySelector('.boxMail')
+    var close = document.querySelector('.fa-xmark')
     mailBox.onclick = function () {
-        mailBox.classList.toggle('active');
-        boxmail.classList.add('active');
-    };
+        mailBox.classList.toggle('active')
+        boxmail.classList.add('active')
+    }
     close.addEventListener('click', function () {
-        boxmail.classList.remove('active');
-    });
+        boxmail.classList.remove('active')
+    })
 </script>
 
 </html>

@@ -163,6 +163,10 @@
                 </div>
             </div>
         </div>
+
+        <!-- NEW: 背景音乐播放器（点击“Click Here 陈情”时开始播放） -->
+        <audio id="bgm" src="happybirthday.m4a" preload="auto" loop></audio>
+        <!-- /NEW -->
     </div>
 
 </body>
@@ -200,9 +204,23 @@
     mailBox.onclick = function () {
         mailBox.classList.toggle('active')
         boxmail.classList.add('active')
+
+        // NEW: 打开信封的同时播放音乐
+        const bgm = document.getElementById('bgm');
+        if (bgm) {
+            try {
+                bgm.currentTime = 0;
+                bgm.play();
+            } catch (e) {
+                // 某些浏览器可能需要用户再次交互，忽略错误即可
+                console.warn('Audio play blocked:', e);
+            }
+        }
+        // /NEW
     }
     close.addEventListener('click', function () {
         boxmail.classList.remove('active')
+        // （不要求改动：如需关闭时暂停音乐，可在这里加 bgm.pause()）
     })
 </script>
 

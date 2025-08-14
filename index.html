@@ -17,7 +17,7 @@
     <script src="https://code.jquery.com/jquery-3.7.1.min.js"
         integrity="sha256-/JqT3SQfawRcv/BIHPThkBvs0OEvtFFmqPF/lYI/Cxo=" crossorigin="anonymous"></script>
     <style>
-        /* 缩小主页头像圆圈尺寸 */
+        /* 缩小主页头像圆圈尺寸（保持你原有设置） */
         .box__account .image {
             width: 170px;
             height: 170px;
@@ -29,6 +29,43 @@
             border: 4px solid #fff;
             object-fit: cover;
         }
+
+        /* === 移动端信封可见性/层级/3D 前缀补丁（新增，不影响你原样式） === */
+        .boxMail{
+            position: fixed;       /* 防止被父级 overflow 裁切 */
+            inset: 0;              /* top/right/bottom/left:0 */
+            z-index: 9999;         /* 始终在最上层 */
+            display: none;         /* 初始隐藏，由 .active 控制 */
+            visibility: hidden;
+            pointer-events: none;  /* 初始不接收点击 */
+        }
+        .boxMail.active{
+            display: block;
+            visibility: visible;
+            pointer-events: auto;
+        }
+        .boxMail-container{
+            position: absolute;
+            inset: 0;
+            margin: auto;
+            width: min(92vw, 520px);
+            height: auto;
+            perspective: 1200px;
+            -webkit-perspective: 1200px;
+            transform: translateZ(0);
+            -webkit-transform: translateZ(0);
+            will-change: transform, opacity;
+        }
+        .boxMail-container *,
+        .boxMail .card1,
+        .boxMail .card2{
+            transform-style: preserve-3d;
+            -webkit-transform-style: preserve-3d;
+            backface-visibility: hidden;
+            -webkit-backface-visibility: hidden;
+        }
+        /* 若上层装饰挡到按钮点击，可抬高按钮层级 */
+        #btn__letter{ position: relative; z-index: 10000; }
     </style>
 </head>
 
@@ -146,15 +183,15 @@
                     <div class="imageCute">
                         <img src="cute1.png" alt="">
                     </div>
-                    <!-- 新增封面落款 -->
-                    <p style="margin-top:10px; font-size:14px; color:#555;">From：斯威特厚木后花园</p>
+                    <!-- 封面落款：白色 -->
+                    <p style="margin-top:10px; font-size:14px; color:#fff;">From：斯威特厚木后花园</p>
                 </div>
                 <div class="card2">
                     <div class="card2-content">
                         <h3>To 陈情宝贝</h3>
                         <h2>
                             Happy birthday 🥳🎂🥳 非常幸运能够在Sweet Home与你相遇。谢谢你一直像天使姐姐一样照顾着每个人的情绪。真心祝福陈情宝贝破壳日快乐🐣希望你每天都开心顺遂。<br>
-                            <span style="font-size:14px; color:#555;">made by 小楠楠</span>
+                            <span style="font-size:14px; color:#fff;">made by 小楠楠</span>
                         </h2>
                         <div class="imageCute2">
                             <img src="cute2.png" alt="">
@@ -204,6 +241,39 @@
     close.addEventListener('click', function () {
         boxmail.classList.remove('active')
     })
+
+    // === 移动端补充：同时监听按钮与内层 mail 的 click+touchend，保证 iOS 触发 ===
+    (function(){
+      const openTargets = [
+        document.getElementById('btn__letter'),
+        document.querySelector('.mail')
+      ].filter(Boolean);
+      function openLetter(e){
+        if(e){ e.preventDefault(); e.stopPropagation(); }
+        boxmail.classList.add('active');
+        void boxmail.offsetHeight; // 触发一次重排，帮助移动端过渡启动
+      }
+      function closeLetter(e){
+        if(e){ e.preventDefault(); e.stopPropagation(); }
+        boxmail.classList.remove('active');
+      }
+      openTargets.forEach(el=>{
+        ['click','touchend'].forEach(evt=>{
+          el.addEventListener(evt, openLetter, {passive:false});
+        });
+        // 键盘可达性
+        el.setAttribute('role','button');
+        el.setAttribute('tabindex','0');
+        el.addEventListener('keydown', (e)=>{
+          if(e.key==='Enter' || e.key===' '){ openLetter(e); }
+        });
+      });
+      if(close){
+        ['click','touchend'].forEach(evt=>{
+          close.addEventListener(evt, closeLetter, {passive:false});
+        });
+      }
+    })();
 </script>
 
 </html>

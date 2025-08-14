@@ -16,9 +16,8 @@
         rel="stylesheet">
     <script src="https://code.jquery.com/jquery-3.7.1.min.js"
         integrity="sha256-/JqT3SQfawRcv/BIHPThkBvs0OEvtFFmqPF/lYI/Cxo=" crossorigin="anonymous"></script>
-
     <style>
-        /* 缩小主页头像圆圈尺寸（保持你原设置） */
+        /* 缩小主页头像圆圈尺寸 */
         .box__account .image {
             width: 170px;
             height: 170px;
@@ -30,62 +29,6 @@
             border: 4px solid #fff;
             object-fit: cover;
         }
-
-        /* === 信封层：移动端可见性/层级/3D 前缀补丁（新增） === */
-        .boxMail{
-            position: fixed;
-            inset: 0;
-            z-index: 9999;
-            display: none;
-            visibility: hidden;
-            pointer-events: none;
-        }
-        .boxMail.active{
-            display: block;
-            visibility: visible;
-            pointer-events: auto;
-        }
-        .boxMail-container{
-            position: absolute;
-            inset: 0;
-            margin: auto;
-            width: min(92vw, 520px);
-            height: auto;
-            perspective: 1200px;
-            -webkit-perspective: 1200px;
-            transform: translateZ(0);
-            -webkit-transform: translateZ(0);
-            will-change: transform, opacity;
-        }
-        .boxMail-container *,
-        .boxMail .card1,
-        .boxMail .card2{
-            transform-style: preserve-3d;
-            -webkit-transform-style: preserve-3d;
-            backface-visibility: hidden;
-            -webkit-backface-visibility: hidden;
-        }
-        #btn__letter{ position: relative; z-index: 10000; }
-
-        /* === 新增：信封展开切换（最小样式，不动你原有 CSS） === */
-        .boxMail .card1{ display:block; }
-        .boxMail .card2{ display:none; opacity:0; transform:rotateY(-10deg) translateY(6px); -webkit-transform:rotateY(-10deg) translateY(6px); }
-        .boxMail.opened .card1{ display:none; }
-        .boxMail.opened .card2{
-            display:block;
-            animation: letterIn 450ms ease forwards;
-        }
-        @keyframes letterIn{
-            from{ opacity:0; transform:rotateY(-10deg) translateY(6px); }
-            to{ opacity:1; transform:none; }
-        }
-        @-webkit-keyframes letterIn{
-            from{ opacity:0; -webkit-transform:rotateY(-10deg) translateY(6px); }
-            to{ opacity:1; -webkit-transform:none; }
-        }
-
-        /* 封面/内页可点击手势提示（可选） */
-        .boxMail .card1, .boxMail .card2 { cursor: pointer; }
     </style>
 </head>
 
@@ -203,7 +146,7 @@
                     <div class="imageCute">
                         <img src="cute1.png" alt="">
                     </div>
-                    <!-- 封面落款：白色 -->
+                    <!-- 新增封面落款（白色字体） -->
                     <p style="margin-top:10px; font-size:14px; color:#fff;">From：斯威特厚木后花园</p>
                 </div>
                 <div class="card2">
@@ -260,67 +203,7 @@
     }
     close.addEventListener('click', function () {
         boxmail.classList.remove('active')
-        // 关闭时复位到封面
-        boxmail.classList.remove('opened')
     })
-
-    // === 移动端补充：click + touchend，保证 iOS/安卓触发 ===
-    (function(){
-      const openTargets = [
-        document.getElementById('btn__letter'),
-        document.querySelector('.mail')
-      ].filter(Boolean);
-
-      function openLetter(e){
-        if(e){ e.preventDefault(); e.stopPropagation(); }
-        boxmail.classList.add('active');
-        void boxmail.offsetHeight; // 触发一次重排，帮助移动端过渡
-      }
-      function closeLetter(e){
-        if(e){ e.preventDefault(); e.stopPropagation(); }
-        boxmail.classList.remove('active');
-        boxmail.classList.remove('opened');
-      }
-
-      openTargets.forEach(el=>{
-        ['click','touchend'].forEach(evt=>{
-          el.addEventListener(evt, openLetter, {passive:false});
-        });
-        el.setAttribute('role','button');
-        el.setAttribute('tabindex','0');
-        el.addEventListener('keydown', (e)=>{
-          if(e.key==='Enter' || e.key===' '){ openLetter(e); }
-        });
-      });
-      if(close){
-        ['click','touchend'].forEach(evt=>{
-          close.addEventListener(evt, closeLetter, {passive:false});
-        });
-      }
-
-      /* === 关键新增：点信封封面(.card1)→展开到内页(.card2) === */
-      const cover = document.querySelector('.boxMail .card1');
-      const letter = document.querySelector('.boxMail .card2');
-      function openInside(e){
-        if(e){ e.preventDefault(); e.stopPropagation(); }
-        if(!boxmail.classList.contains('active')) return; // 先打开弹层
-        boxmail.classList.add('opened'); // 切换到 card2
-      }
-      if(cover){
-        ['click','touchend'].forEach(evt=>{
-          cover.addEventListener(evt, openInside, {passive:false});
-        });
-      }
-      // 可选：点内页也能关闭（如不需要可删）
-      if(letter){
-        ['click','touchend'].forEach(evt=>{
-          letter.addEventListener(evt, function(e){
-            // e.preventDefault(); e.stopPropagation(); // 如需点击内页不关闭则注释掉下面两行
-            // closeLetter(e);
-          }, {passive:false});
-        });
-      }
-    })();
 </script>
 
 </html>
